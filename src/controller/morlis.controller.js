@@ -100,8 +100,6 @@ router.post('/moralis-webhook', async(req, res) => {
       message:
         "Webhook received successfully",
     });
-  
-    // res.status(200).send('Webhook received successfully');
   });
 
 module.exports = router;
