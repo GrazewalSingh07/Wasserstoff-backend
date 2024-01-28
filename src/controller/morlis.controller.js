@@ -4,6 +4,8 @@ const router = express.Router();
 const Moralis = require("moralis").default;
 const { EvmChain } = require("@moralisweb3/common-evm-utils");
 const chain = EvmChain.ETHEREUM;
+const run = require("../config/db");
+
 
 async function getData(address, chain) {
   // Get native balance
@@ -87,15 +89,19 @@ router.post("/subscribe", async (req, res) => {
  
 });
 
-router.post('/moralis-webhook', (req, res) => {
+router.post('/moralis-webhook', async(req, res) => {
      
-    
-    const data = req.body;
-    console.log('Received Moralis webhook:', data);
+  let db =   await run()
+  let transactions= await db.collection("transactions").insertOne(req.body)
+
+  return res.status(201)
+    .send({
+      product: transactions,
+      message:
+        "Webhook received successfully",
+    });
   
-     
-  
-    res.status(200).send('Webhook received successfully');
+    // res.status(200).send('Webhook received successfully');
   });
 
 module.exports = router;
